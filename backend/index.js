@@ -3,22 +3,30 @@ import dotenv from "dotenv";
 import connectDb from "./config/db.js";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth.routes.js";
-import cors from "cors"
-
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
-app.use(express.json())
-app.use(cookieParser());
-app.use("/api/auth",authRouter)
+
+// Middlewares
 app.use(cors({
-  origin:"http://localhost:5173",
-  credentials:true
-}))
+  origin: "http://localhost:5173",
+  credentials: true,
+}));
+
+app.use(express.json());
+app.use(cookieParser());
+
+// Routes
+app.use("/api/auth", authRouter);
+
 connectDb();
 
-app.listen(process.env.PORT || 8000, () => {
-  console.log("Server Started");
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server Started on Port ${PORT}`);
 });
+
 console.log("Mongo URL =", process.env.MONGODB_URL);
