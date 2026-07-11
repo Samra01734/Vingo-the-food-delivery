@@ -26,22 +26,3 @@ export const sendOtpMail = async (to, otp) => {
   });
 };
 
-export const sendOtp=async (req,res)=>{
-try {
-  const {email}=req.body
-  const user=await User.findObe({email})
-  if(!user){
-    return res.status(400).json({message:"User does not exist."})
-  }
-  const otp=Math.floor(100+Math.eandom()*9000).toString()
-  user.resetOtp=otp 
-  user.otpExpires=Date.now()+5*60*60*1000
-  user.isOtpVerified=false
-
-  await user.save()
-  await sendOtpMail(user.Date)
-
-} catch (error) {
-  
-}
-}
