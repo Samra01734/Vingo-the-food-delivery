@@ -1,7 +1,7 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import genToken from "../utils/token.js";
-import { sendOtpMail } from "../utils/sendOtpMail.js";
+import { sendOtpMail } from "../utils/mail.js";
 
 // ================= SIGN UP =================
 export const signUp = async (req, res) => {
@@ -131,13 +131,19 @@ export const sendOtp = async (req, res) => {
   try {
     const { email } = req.body;
 
+    console.log("Email Received:", email);
+
     const user = await User.findOne({ email });
+
+    console.log("User Found:", user);
 
     if (!user) {
       return res.status(400).json({
         message: "User does not exist.",
       });
     }
+
+  
 
     const otp = Math.floor(1000 + Math.random() * 9000).toString();
 
