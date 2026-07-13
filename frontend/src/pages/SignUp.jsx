@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { Link } from "react-router-dom";
+import {GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
 
 const serverUrl = "http://localhost:5000"; // Change according to your backend
 
@@ -87,7 +88,11 @@ const SignUP = () => {
       );
     }
   };
-
+const handleGoogleAuth=async()=>{
+  const provider=new GoogleAuthProvider()
+  const result=await signInWithPopup(Auth,provider)
+  console.log(result)
+}
   return (
     <div
       className="min-h-screen flex items-center justify-center p-4"
@@ -277,7 +282,9 @@ const SignUP = () => {
           {/* Google Button */}
           <button
             type="button"
-            className="w-full border rounded-lg py-3 flex items-center justify-center gap-3 font-medium hover:bg-gray-50 transition"
+            className="w-full border rounded-lg py-3 flex items-center justify-center
+             gap-3 font-medium hover:bg-gray-50 transition"
+             onClick={handleGoogleAuth}
             style={{
               border: `1px solid ${borderColor}`,
             }}
