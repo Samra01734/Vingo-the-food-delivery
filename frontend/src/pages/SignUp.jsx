@@ -9,8 +9,8 @@ import {
 } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { Link } from "react-router-dom";
-import {GoogleAuthProvider, signInWithPopup} from 'firebase/auth';
-
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../../firebase";
 const serverUrl = "http://localhost:5000"; // Change according to your backend
 
 const SignUP = () => {
@@ -88,11 +88,23 @@ const SignUP = () => {
       );
     }
   };
-const handleGoogleAuth=async()=>{
-  const provider=new GoogleAuthProvider()
-  const result=await signInWithPopup(Auth,provider)
-  console.log(result)
-}
+const handleGoogleAuth = async () => {
+  try {
+    const provider = new GoogleAuthProvider();
+
+    const result = await signInWithPopup(auth, provider);
+
+    console.log("Google User:", result.user);
+
+    alert("Google Sign Up Successful");
+
+    // Agar backend me Google route bana ho to yahan axios.post() kar sakte ho
+
+  } catch (error) {
+    console.error("Google Login Error:", error);
+    alert(error.message);
+  }
+};
   return (
     <div
       className="min-h-screen flex items-center justify-center p-4"
