@@ -90,6 +90,11 @@ const SignUP = () => {
   };
 const handleGoogleAuth = async () => {
   try {
+    if(!mobile){
+     return  alert("Mobile number is required")
+    }
+
+
     const provider = new GoogleAuthProvider();
 
     const result = await signInWithPopup(auth, provider);
@@ -98,7 +103,17 @@ const handleGoogleAuth = async () => {
 
     alert("Google Sign Up Successful");
 
-    // Agar backend me Google route bana ho to yahan axios.post() kar sakte ho
+    try {
+      const {data}= await axios.post(`${serverUrl}/api/auth/google-auth`,{
+        fullName:result.user.displayName ,
+        email:result.user.email,
+        role,
+        mobile
+      },{withCredentials:true})
+      console.log(data)
+    } catch (error) {
+      
+    }
 
   } catch (error) {
     console.error("Google Login Error:", error);

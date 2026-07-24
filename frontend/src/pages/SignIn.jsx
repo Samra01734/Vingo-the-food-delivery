@@ -3,6 +3,8 @@ import axios from "axios";
 import { FaEye, FaEyeSlash, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
+import { GoogleAuthProvider, signInWithPopup } from "@firebase/auth";
+import { auth } from "../../firebase";
 
 const serverUrl = "http://localhost:5000";
 
@@ -93,6 +95,38 @@ const SignIn = () => {
       setLoading(false);
     }
   };
+  const handleGoogleAuth = async () => {
+  try {
+    if(!mobile){
+     return  alert("Mobile number is required")
+    }
+
+
+    const provider = new GoogleAuthProvider();
+
+    const result = await signInWithPopup(auth, provider);
+
+    console.log("Google User:", result.user);
+
+    alert("Google Sign Up Successful");
+
+    try {
+      const {data}= await axios.post(`${serverUrl}/api/auth/google-auth`,{
+        fullName:result.user.displayName ,
+        email:result.user.email,
+        role,
+        mobile
+      },{withCredentials:true})
+      console.log(data)
+    } catch (error) {
+      
+    }
+
+  } catch (error) {
+    console.error("Google Login Error:", error);
+    alert(error.message);
+  }
+};
 
   return (
     <div
@@ -225,6 +259,8 @@ const SignIn = () => {
             style={{
               border: `1px solid ${borderColor}`,
             }}
+                          onClick={handleGoogleAuth}
+
           >
             <img
               src="https://www.svgrepo.com/show/475656/google-color.svg"
